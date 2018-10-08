@@ -1,0 +1,36 @@
+CREATE TABLE `user` (
+	`username`	TEXT UNIQUE,
+	`password`	TEXT,
+	`enable`	BLOB,
+	`admin`	INTEGER,
+	PRIMARY KEY(`username`)
+);
+
+
+CREATE TABLE `messages` (
+	`username_id`	TEXT,
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`expediteur_id`	TEXT,
+	`date`	TEXT,
+	`subject`	TEXT,
+	`body`	TEXT
+);
+
+
+
+insert into user (username,password,enable,admin)
+VALUES ( 'dylan','1234',1,1);
+
+insert into user (username,password,enable,admin)
+VALUES ( 'yannis','1234',1,0);
+
+
+select username from user where admin = 1;
+
+INSERT INTO users(username, password, enable, admin) VALUES ('dylan', '123123', 1, 1);
+
+select * from users;
+
+UPDATE users SET password = '456456' WHERE username = 'dylan';
+
+select * from users;
