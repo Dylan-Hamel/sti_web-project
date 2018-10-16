@@ -6,96 +6,79 @@
 </style>
 </head>
 <body>  
-	
-<?php	
+<h1>
+	WELCOME	
+</h1>
+<ul>
+  <li>Logged as <?php session_start(); echo $_SESSION['username']?></li>
+</ul>
+
+
+<?php
 
 session_start();
 
-if (isset($_SESSION['username']))	 {
-	header("Location: inbox.php");
+if (!isset($_SESSION['username']))	 {
+	header("Location: login.php");
 }
+	
+    try {
+		
+  	  // Connect DB
+  	   $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
+  	   // Set errormode to exceptions
+  	   $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+	   
+		$username = $_SESSION['username'];
+		$result =  $file_db->query("SELECT * FROM messages WHERE receiver = '$username';");
 
-// define variables
-$usernameErr = $passwordErr = "";
-$username = $password = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  if (empty($_POST["username"])) {
-    $usernameErr = "Username is required";
-  } else {
-	  $username = $_POST["username"];	
-  }
-  
-  if (empty($_POST["password"])) {
-    $passwordErr = "Password is required";
-  } else {
-    $password = $_POST["password"];
-  }
-  
-  try {
-	  // Connect DB
-	   $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
-	   // Set errormode to exceptions
-	   $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+		foreach($result as $row) {
+			echo "======================================================";
+			echo "<br/>";
+			echo "Title: " . $row['title'] . "<br/>";
+			echo "Sender: " . $row['sender'] . "<br/>";
+			echo "Receiver: " . $row['receiver'] . "<br/>";
+			echo "Date: " . $row['datetime'] . "<br/>";
+			echo "Body: " . $row['body'] . "<br/>";
+			echo "<br/>";
+		}
 	   
-	   // Select all users/password in DB
-	    $result =  $file_db->query("SELECT username, password FROM users;");
-	   /*
-	   $file_db->exec("INSERT INTO users (username, password, enable, admin) 
-	                   VALUES ('dylan','123123',1,1)");
-	   $file_db->exec("INSERT INTO users (username, password, enable, admin) 
-	                   VALUES ('yannis','123123',0,0)");
-	   
-	   
-	  
-	   
-       foreach($result as $row) {
-         echo "Username: " . $row['username'] . "<br/>";
-         echo "Password: " . $row['password'] . "<br/>";
-         echo "Enable: " . $row['enable'] . "<br/>";
-         echo "Admin: " . $row['admin'] . "<br/>";
-         echo "<br/>";
-       }
-	   */
-	   
-	   
-	   foreach($result as $row) {
-		   if ($username == $row['username'] && $password == $row['password'] ){ 
-			   $_SESSION['username'] = $username;
-			   $_SESSION['admin'] = $row['admin'];
-			   header("Location: inbox.php");
-		   }
-	   }  
-	   
-	   $usernameErr = "Username error";
-	   $passwordErr = "Password error";
-	   
-   } catch(PDOException $e) {
-     // Print PDOException message
-     echo $e->getMessage();
-   }   
-  
-}
+     } catch(PDOException $e) {
+       // Print PDOException message
+       echo $e->getMessage();
+     }  
 ?>
 
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
-  Username: </br><input type="text" name="username" value="<?php echo $username;?>">
-  <?php
-  if (!empty($usernameErr)) {
-	  echo $usernameErr;
-  }
-  ?>
-  <br><br>
-  Password: </br><input type="text" name="password" value="<?php echo $password;?>">
-  <?php
-  if (!empty($passwordErr)) {
-	  echo $passwordErr;
-  }
-  ?>
-  <br><br>
-  
-  <button type="submit" class="btn btn-primary">Submit</button>
-  
+
+<?php
+
+session_start();
+	
+// print_r($_SESSION);
+
+		
+?>
+
+<form method="post" action="<?php echo htmlspecialchars("messages.php");?>">
+	<button type="submit" class="btn btn-primary">Send Message</button>
+</form>
+<form method="post" action="<?php echo htmlspecialchars("manageuser.php");?>">
+	<button type="submit" class="btn btn-primary">Manage User</button>
+</form>
+<form method="post" action="<?php echo htmlspecialchars("password.php");?>">
+	<button type="submit" class="btn btn-primary">Change Password</button>
+</form>
+<form method="post" action="<?php echo htmlspecialchars("adduser.php");?>">
+	<button type="submit" class="btn btn-primary">Add User</button>
+</form>
+<form method="post" action="<?php echo htmlspecialchars("removeuser.php");?>">
+	<button type="submit" class="btn btn-primary">Remove user</button>
+</form>
+<form method="post" action="<?php echo htmlspecialchars("passworduser.php");?>">
+	<button type="submit" class="btn btn-primary">Change User Password</button>
+</form>
+<form method="post" action="<?php echo htmlspecialchars("logout.php");?>">
+	<button type="submit" class="btn btn-primary">Logout</button>
 </form>
 </body>
 </html>

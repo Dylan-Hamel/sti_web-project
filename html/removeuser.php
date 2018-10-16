@@ -14,7 +14,12 @@
 		</ul>
 	
 		<?php	
+		
 		session_start();
+
+		if (!isset($_SESSION['username']))	 {
+			header("Location: login.php");
+		}
 
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			
@@ -59,9 +64,7 @@
 					echo $e->getMessage();
 				}
    
-			} else {
-				echo 'Error USER NOT REMOVED';
-			}   
+			} 
 	
 
 		}
@@ -79,8 +82,6 @@
 			<br><br>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
-		<form method="post" action="<?php echo htmlspecialchars("inbox.php");?>">  
-			<button type="submit" class="btn btn-primary">Return</button>
-		</form>
+		<button onclick="window.history.back();"> Return </button>
 	</body>
 	</html>

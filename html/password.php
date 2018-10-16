@@ -8,7 +8,12 @@
 <body>  
 	
 <?php	
+
 session_start();
+
+if (!isset($_SESSION['username']))	 {
+	header("Location: login.php");
+}
 
 $password_1 = $password_2 = "";
 
@@ -31,8 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-<form method="post" action="<?php echo htmlspecialchars("inbox.php");?>">  
-  <button type="submit" class="btn btn-primary">Return</button>
-</form>
+<button onclick="window.history.back();"> Return </button>
 </body>
 </html>

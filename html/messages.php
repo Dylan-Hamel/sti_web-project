@@ -17,6 +17,10 @@
 <?php
 
 session_start();
+
+if (!isset($_SESSION['username']))	 {
+	header("Location: login.php");
+}
 	
 // define variables
 $receiverErr = $titleErr = $bodyErr = "";
@@ -88,8 +92,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  </p> 
  <p><input type="submit" value="Send"></p>
 </form>
-<form method="post" action="<?php echo htmlspecialchars("inbox.php");?>">
-	<button type="submit" class="btn btn-primary">Return</button>
-</form>
+<button onclick="window.history.back();"> Return </button>
 </body>
 </html>

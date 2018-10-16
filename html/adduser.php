@@ -16,6 +16,10 @@
 		<?php	
 		session_start();
 
+		if (!isset($_SESSION['username']))	 {
+			header("Location: login.php");
+		}
+
 		$passwordErr = $usernameErr = "";
 		$newusername = $password = "";
 		$enable = $admin = 0;
@@ -79,11 +83,7 @@
 					echo $e->getMessage();
 				}
    
-			} else {
-				echo 'Error USER NOT ADDED';
-			}   
-	
-
+			}
 		}
 
 		?>
@@ -113,8 +113,6 @@
     
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
-		<form method="post" action="<?php echo htmlspecialchars("inbox.php");?>">  
-			<button type="submit" class="btn btn-primary">Return</button>
-		</form>
+		<button onclick="window.history.back();"> Return </button>
 	</body>
 	</html>
