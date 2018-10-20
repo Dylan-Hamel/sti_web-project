@@ -1,4 +1,3 @@
-FINI MON GARS
 <?php
 session_start();
 session_unset();

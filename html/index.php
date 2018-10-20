@@ -1,84 +1,69 @@
-<!DOCTYPE HTML>  
-<html>
-<head>
-<style>
-.error {color: #FF0000;}
-</style>
-</head>
-<body>  
+<?php
+include_once ('./header.php');
+?>
+<script src='script/tablesort.min.js'></script>
+<script src='script/tablesort.date.min.js'></script>
+<script>
+  new Tablesort(document.getElementById('messages'));
+</script>
+<body>
 <h1>
 	WELCOME	
 </h1>
 <ul>
-  <li>Logged as <?php session_start(); echo $_SESSION['username']?></li>
+  <li>Logged as <?php echo $_SESSION['username']; ?></li>
 </ul>
 
-
+<table id="messages" style="width:100%">
+  <tr>
+    <th>Read</th>
+    <th>Title</th>
+    <th>Sender</th> 
+    <th>Date</th>
+	<th>Actions</th>
+  </tr>
+  
 <?php
-
-session_start();
-
-if (!isset($_SESSION['username']))	 {
-	header("Location: login.php");
+try {
+    // Connect DB
+    $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
+    // Set errormode to exceptions
+    $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $username = $_SESSION['username'];
+    $stmt = $file_db->prepare('SELECT * FROM messages WHERE receiver = :username;');
+    $stmt->execute(array(':username' => $username));
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->close();
+    $stmt = null;
+    $file_db = null;
+    foreach ($result as $rows => $row) {
+        echo "<tr>";
+		/*
+        echo "<td>";
+        if ($row['read']) echo "<input type=\"checkbox\" checked disabled readonly />";
+        else echo "<input type=\"checkbox\" disabled readonly />";
+        echo "</td>";
+		*/
+        echo "<td>" . $row['title'] . "</td>";
+        echo "<td>" . $row['sender'] . "</td>";
+        echo "<td>" . $row['datetime'] . "</td>";
+        echo "<td><a href=\"delete.php?id=$row['id']\" class=\"button\">Delete</a> <a href=\"read.php?id=$row['id']\" class=\"button\">Read</a> <a href=\"messages.php?receiver=$row['sender']&title=Re:$row['title']'\" class=\"button\">Answer</a></td>";
+        echo "</tr>";
+    }
+    echo "</table>";
 }
-	
-    try {
-		
-  	  // Connect DB
-  	   $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
-  	   // Set errormode to exceptions
-  	   $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
-	   
-		$username = $_SESSION['username'];
-		$result =  $file_db->query("SELECT * FROM messages WHERE receiver = '$username';");
-
-		foreach($result as $row) {
-			echo "======================================================";
-			echo "<br/>";
-			echo "Title: " . $row['title'] . "<br/>";
-			echo "Sender: " . $row['sender'] . "<br/>";
-			echo "Receiver: " . $row['receiver'] . "<br/>";
-			echo "Date: " . $row['datetime'] . "<br/>";
-			echo "Body: " . $row['body'] . "<br/>";
-			echo "<br/>";
-		}
-	   
-     } catch(PDOException $e) {
-       // Print PDOException message
-       echo $e->getMessage();
-     }  
+catch(PDOException $e) {
+    // Print PDOException message
+    echo $e->getMessage();
+}
 ?>
 
-
-<?php
-
-session_start();
-	
-// print_r($_SESSION);
-
-		
-?>
-
-<form method="post" action="<?php echo htmlspecialchars("messages.php");?>">
-	<button type="submit" class="btn btn-primary">Send Message</button>
-</form>
-<form method="post" action="<?php echo htmlspecialchars("manageuser.php");?>">
-	<button type="submit" class="btn btn-primary">Manage User</button>
-</form>
-<form method="post" action="<?php echo htmlspecialchars("password.php");?>">
-	<button type="submit" class="btn btn-primary">Change Password</button>
-</form>
-<form method="post" action="<?php echo htmlspecialchars("adduser.php");?>">
-	<button type="submit" class="btn btn-primary">Add User</button>
-</form>
-<form method="post" action="<?php echo htmlspecialchars("removeuser.php");?>">
-	<button type="submit" class="btn btn-primary">Remove user</button>
-</form>
-<form method="post" action="<?php echo htmlspecialchars("passworduser.php");?>">
-	<button type="submit" class="btn btn-primary">Change User Password</button>
-</form>
-<form method="post" action="<?php echo htmlspecialchars("logout.php");?>">
-	<button type="submit" class="btn btn-primary">Logout</button>
-</form>
+<a href="messages.php" class="button">Send Message</a>
+<a href="manageuser.php" class="button">Manage User</a>
+<a href="password.php" class="button">Change Password</a>
+<a href="adduser.php" class="button">Add User</a>
+<a href="removeuser.php" class="button">Remove user</a>
+<a href="passworduser.php" class="button">Change User Password</a>
+<a href="logout.php" class="button">Logout</a>
 </body>
 </html>

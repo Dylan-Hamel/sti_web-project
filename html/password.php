@@ -1,41 +1,68 @@
-<!DOCTYPE HTML>  
-<html>
-<head>
-<style>
-.error {color: #FF0000;}
-</style>
-</head>
-<body>  
+<?php
+include_once ('./header.php');
+?>
+<body>
+<h1>
+	Change password
+</h1>
+<ul>
+  <li>Logged as <?php echo $_SESSION['username']; ?></li>
+</ul>
 	
-<?php	
-
-session_start();
-
-if (!isset($_SESSION['username']))	 {
-	header("Location: login.php");
+<?php
+$password1 = $password2 = "";
+$passwordMismatch = "";
+$applied = 2;
+$username = $_SESSION['username'];
+if (isset($_GET['username']) and $_SESSION['admin'] == 1) {
+    $username = htmlspecialchars($_GET['username']);
 }
-
-$password_1 = $password_2 = "";
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if (((!empty($_POST["$password_1"])) and (!empty($_POST["$password_2"]))) or $_POST["$password_1"] != $_POST["$password_2"])  {
-		// Injection SQL
-		$update = ("UPDATE users SET password = " . $password_1 .  " WHERE username = " . $_SESSION['username'] . ";");
-	}		
+    if (isset($_POST["password1"]) and !empty($_POST["password1"])) {
+        $password1 = htmlspecialchars($_POST["password1"]);
+    }
+    if (isset($_POST["password2"]) and !empty($_POST["password2"])) {
+        $password2 = htmlspecialchars($_POST["password2"]);
+    }
+    if ($password1 == $password2) {
+        try {
+            // Connect DB
+            $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
+            // Set errormode to exceptions
+            $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $file_db->prepare('UPDATE users SET password = :password WHERE username = :username');
+            $stmt->execute(array(':password' => $password1, ':username' => $username));
+            $applied = $stmt->rowCount();
+            $stmt->close();
+            $stmt = null;
+            $file_db = null;
+        }
+        catch(PDOException $e) {
+            // Print PDOException message
+            echo $e->getMessage();
+        }
+    } else {
+        $passwordMismatch = "Les mot de passe de correspondent pas";
+    }
 }
-	
-
 ?>
 
 
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
-  Password: </br><input type="text" name="password_1">
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">  
+  Password: </br><input type="password" name="password1">
   <br><br>
-  Re-Type: </br><input type="text" name="password_2">
+  Re-Type: </br><input type="password" name="password2">
   <br><br>
-    
-  <button type="submit" class="btn btn-primary">Submit</button>
+  <?php
+if (!empty($passwordMismatch)) {
+    echo $passwordMismatch;
+}
+if ($applied == 0) {
+    echo "Impossible de mettre à jour le mot de passe de cet utilisateur : $username, êtes-vous sûr qu'il existe ?";
+}
+?>
+  <button type="submit">Submit</button>
 </form>
-<button onclick="window.history.back();"> Return </button>
+<button onclick="window.history.back();">Return</button>
 </body>
 </html>
