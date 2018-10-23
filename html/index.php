@@ -1,5 +1,5 @@
 <?php
-include_once ('./header.php');
+include_once 'header.php';
 ?>
 <script src='script/tablesort.min.js'></script>
 <script src='script/tablesort.date.min.js'></script>
@@ -16,7 +16,7 @@ include_once ('./header.php');
 
 <table id="messages" style="width:100%">
   <tr>
-    <th>Read</th>
+    <!-- <th>Read</th> -->
     <th>Title</th>
     <th>Sender</th> 
     <th>Date</th>
@@ -47,7 +47,7 @@ try {
         echo "<td>" . $row['title'] . "</td>";
         echo "<td>" . $row['sender'] . "</td>";
         echo "<td>" . $row['datetime'] . "</td>";
-        echo "<td><a href=\"delete.php?id=$row['id']\" class=\"button\">Delete</a> <a href=\"read.php?id=$row['id']\" class=\"button\">Read</a> <a href=\"messages.php?receiver=$row['sender']&title=Re:$row['title']'\" class=\"button\">Answer</a></td>";
+        echo "<td><a href=\"delete.php?id=".$row['id']."\" class=\"button\">Delete</a> <a href=\"read.php?id=".$row['id']."\" class=\"button\">Read</a> <a href=\"messages.php?receiver=".$row['sender']."&title=Re:".$row['title']."'\" class=\"button\">Answer</a></td>";
         echo "</tr>";
     }
     echo "</table>";

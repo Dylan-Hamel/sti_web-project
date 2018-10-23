@@ -1,5 +1,5 @@
 <?php
-include_once ('./header.php');
+include_once 'header.php';
 if (!isset($_SESSION['admin']) or $_SESSION['admin'] != 1) {
     header("Location: index.php");
 }

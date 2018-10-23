@@ -9,7 +9,7 @@ if (!isset($_SESSION['username'])) {
 <html>
 <head>
 <?php
-if ($_SESSION['admin'] == 1) {
+if (isset($_SESSION['admin']) and $_SESSION['admin'] == 1) {
     echo "admin";
 }
 ?>
