@@ -39,11 +39,11 @@ if (isset($_GET['id'])) {
                 else echo "<input type=\"checkbox\" disabled readonly />";
 				*/
                 echo "</td>";
-                echo "Title : " . $row['title'];
-                echo "Sender : " . $row['sender'];
-                echo "Date : " . $row['datetime'];
-                echo "Body : " . $row['body'];
-                echo "<a href=\"delete.php?id=$row['id']\" class=\"button\">Delete</a> <a href=\"messages.php?receiver=$row['sender']&title=Re:$row['title']'\" class=\"button\">Answer</a>";
+                echo "Title : " . $row['title'] . "<br>";
+                echo "Sender : " . $row['sender'] . "<br>";
+                echo "Date : " . $row['datetime'] . "<br>";
+                echo "Body : " . $row['body'] . "<br>";
+                echo "<a href=\"delete.php?id=".$row['id']."\" class=\"button\">Delete</a> <a href=\"messages.php?receiver=".$row['sender']."&title=Re:".$row['title']."'\" class=\"button\">Answer</a>";
             }
         } else {
             echo "Ce message ne vous est pas destiné";
