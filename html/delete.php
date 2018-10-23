@@ -38,7 +38,6 @@ if (isset($_GET['id'])) {
                 $stmt = $file_db->prepare("DELETE FROM messages WHERE id=:id;");
                 $stmt->execute(array(':id' => $id));
                 $applied = $stmt->rowCount();
-                $stmt->close();
                 $stmt = null;
                 echo 'MESSAGE REMOVED';
                 header("Location: index.php");
