@@ -48,7 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt = $file_db->prepare('UPDATE users SET password = :password WHERE username = :username');
                 $stmt->execute(array(':password' => $password, ':username' => $username));
                 $applied = $stmt->rowCount();
-                $stmt->close();
                 $stmt = null;
                 echo 'PASSWORD UPDATED';
             } else {

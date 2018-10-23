@@ -27,7 +27,6 @@ if (isset($_GET['id'])) {
             $stmt = $file_db->prepare("SELECT receiver FROM messages WHERE id=:id;");
             $stmt->execute(array(':id' => $id));
             $messageResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $stmt->close();
             $stmt = null;
             $correctUser = False;
             foreach ($messageResult as $rows => $row) {

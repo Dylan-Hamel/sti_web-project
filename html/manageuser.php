@@ -55,7 +55,6 @@ if ($formFilled and !$error) {
             $stmt = $file_db->prepare("UPDATE users SET enable=:enable' WHERE username=:username;");
             $stmt->execute(array(':enable' => $enable, ':username' => $username));
             $applied = $stmt->rowCount();
-            $stmt->close();
             $stmt = null;
             echo 'USER DISABLE';
         } else {

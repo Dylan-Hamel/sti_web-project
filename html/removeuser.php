@@ -53,7 +53,6 @@ if ($formFilled and !$error) {
             $stmt = $file_db->prepare("DELETE FROM users WHERE username=:username;");
             $stmt->execute(array(':username' => $username));
             $applied = $stmt->rowCount();
-            $stmt->close();
             $stmt = null;
             echo 'USER REMOVED';
         } else {

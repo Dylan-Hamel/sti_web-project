@@ -33,10 +33,9 @@ try {
     $stmt = $file_db->prepare('SELECT * FROM messages WHERE receiver = :username;');
     $stmt->execute(array(':username' => $username));
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $stmt->close();
     $stmt = null;
     $file_db = null;
-    foreach ($result as $rows => $row) {
+    foreach ($result as $row) {
         echo "<tr>";
 		/*
         echo "<td>";
@@ -57,13 +56,13 @@ catch(PDOException $e) {
     echo $e->getMessage();
 }
 ?>
-
-<a href="messages.php" class="button">Send Message</a>
-<a href="manageuser.php" class="button">Manage User</a>
-<a href="password.php" class="button">Change Password</a>
-<a href="adduser.php" class="button">Add User</a>
-<a href="removeuser.php" class="button">Remove user</a>
-<a href="passworduser.php" class="button">Change User Password</a>
+ <br>
+<a href="messages.php" class="button">Send Message</a> <br>
+<a href="manageuser.php" class="button">Manage User</a> <br>
+<a href="password.php" class="button">Change Password</a> <br>
+<a href="adduser.php" class="button">Add User</a> <br>
+<a href="removeuser.php" class="button">Remove user</a> <br>
+<a href="passworduser.php" class="button">Change User Password</a> <br>
 <a href="logout.php" class="button">Logout</a>
 </body>
 </html>

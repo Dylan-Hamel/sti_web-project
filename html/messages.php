@@ -66,7 +66,6 @@ if ($formFilled and !$error) {
 		   VALUES (:title, :body, :sender, :receiver, :now');
         $stmt->execute(array(':title' => $title, ':body' => $body, ':sender' => $_SESSION['username'], ':receiver' => $receiver, ':now' => $now));
         $applied = $stmt->rowCount();
-        $stmt->close();
         $stmt = null;
         $file_db = null;
     }
