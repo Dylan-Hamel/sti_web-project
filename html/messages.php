@@ -62,8 +62,7 @@ if ($formFilled and !$error) {
         $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
         // Set errormode to exceptions
         $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $stmt = $file_db->prepare('INSERT INTO messages (title, body, sender, receiver, datetime) 
-		   VALUES (:title, :body, :sender, :receiver, :now');
+        $stmt = $file_db->prepare('INSERT INTO messages (title, body, sender, receiver, datetime) VALUES (:title, :body, :sender, :receiver, :now)');
         $stmt->execute(array(':title' => $title, ':body' => $body, ':sender' => $_SESSION['username'], ':receiver' => $receiver, ':now' => $now));
         $applied = $stmt->rowCount();
         $stmt = null;

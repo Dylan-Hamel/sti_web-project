@@ -12,7 +12,7 @@ include_once 'header.php';
 </ul>
 
 <table id="messages" style="width:100%">
-  <tr>
+  <tr data-sort-method='none'>
     <!-- <th>Read</th> -->
     <th>Title</th>
     <th>Sender</th> 
