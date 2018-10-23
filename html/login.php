@@ -15,56 +15,67 @@ if (isset($_SESSION['username'])) {
 // define variables
 $usernameErr = $passwordErr = $disabledErr = "";
 $username = $password = "";
+$userEmpty = $pwdEmpty = True;
+$isEnabled = True;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["username"])) {
         $usernameErr = "Username is required";
     } else {
         $username = htmlspecialchars($_POST["username"]);
+		$userEmpty = False;
     }
     if (empty($_POST["password"])) {
         $passwordErr = "Password is required";
     } else {
         $password = htmlspecialchars($_POST["password"]);
+		$pwdEmpty = False;
     }
-    try {
-        // Connect DB
-        $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
-        // Set errormode to exceptions
-        $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        // Select all users/password in DB
-        $result = $file_db->query("SELECT * FROM users;");
-        /*
-        $file_db->exec("INSERT INTO users (username, password, enable, admin)
-                    VALUES ('dylan','123123',1,1)");
-        $file_db->exec("INSERT INTO users (username, password, enable, admin)
-                    VALUES ('yannis','123123',0,0)");
-        
-        
-        
-        
-        foreach($result as $row) {
-         echo "Username: " . $row['username'] . "<br/>";
-         echo "Password: " . $row['password'] . "<br/>";
-         echo "Enable: " . $row['enable'] . "<br/>";
-         echo "Admin: " . $row['admin'] . "<br/>";
-         echo "<br/>";
-        }
-        */
-        foreach ($result as $row) {
-            if ($username == $row['username'] && $password == $row['password'] && $row['enable'] == 1) {
-                $_SESSION['username'] = $username;
-                $_SESSION['admin'] = $row['admin'];
-                header("Location: index.php");
-            }
-        }
-        $usernameErr = "Username error";
-        $passwordErr = "Password error";
-        $disabledErr = "Account disabled";
-    }
-    catch(PDOException $e) {
-        // Print PDOException message
-        echo $e->getMessage();
-    }
+	
+	if(!$pwdEmpty && !$userEmpty){
+		try {
+			// Connect DB
+			$file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
+			// Set errormode to exceptions
+			$file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			// Select all users/password in DB
+			$result = $file_db->query("SELECT * FROM users;");
+			/*
+			$file_db->exec("INSERT INTO users (username, password, enable, admin)
+						VALUES ('dylan','123123',1,1)");
+			$file_db->exec("INSERT INTO users (username, password, enable, admin)
+						VALUES ('yannis','123123',0,0)");
+			
+			
+			
+			
+			foreach($result as $row) {
+			 echo "Username: " . $row['username'] . "<br/>";
+			 echo "Password: " . $row['password'] . "<br/>";
+			 echo "Enable: " . $row['enable'] . "<br/>";
+			 echo "Admin: " . $row['admin'] . "<br/>";
+			 echo "<br/>";
+			}
+			*/
+			foreach ($result as $row) {
+				if ($username == $row['username'] && $password == $row['password'] && $row['enable'] == 1) {
+					$_SESSION['username'] = $username;
+					$_SESSION['admin'] = $row['admin'];
+					header("Location: index.php");
+				}
+				elseif($username == $row['username'] && $password == $row['password'] && $row['enable'] == 0) {
+					$isEnabled = False;
+				}
+			}
+			
+			$usernameErr = "Username error";
+			$passwordErr = "Password error";
+			$disabledErr = "Account disabled";
+		}
+		catch(PDOException $e) {
+			// Print PDOException message
+			echo $e->getMessage();
+		}
+	}
 }
 ?>
 
@@ -85,6 +96,10 @@ if (!empty($passwordErr)) {
   <br><br>
   <button type="submit">Submit</button>
 </form>
-
+<?php
+if (!$isEnabled) {
+    echo $disabledErr;
+}
+?>
 </body>
 </html>
