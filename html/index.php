@@ -3,9 +3,6 @@ include_once 'header.php';
 ?>
 <script src='script/tablesort.min.js'></script>
 <script src='script/tablesort.date.min.js'></script>
-<script>
-  new Tablesort(document.getElementById('messages'));
-</script>
 <body>
 <h1>
 	WELCOME	
@@ -65,4 +62,7 @@ catch(PDOException $e) {
 <a href="passworduser.php" class="button">Change User Password</a> <br>
 <a href="logout.php" class="button">Logout</a>
 </body>
+<script>
+  new Tablesort(document.getElementById('messages'));
+</script>
 </html>

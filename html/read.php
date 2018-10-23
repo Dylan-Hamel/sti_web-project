@@ -33,9 +33,11 @@ if (isset($_GET['id'])) {
             }
         }
         if ($correctUser) {
-            foreach ($result as $rows => $row) {
-                if ($row['read']) echo "<input type=\"checkbox\" checked disabled readonly />";
+            foreach ($result as $row) {
+                /*
+				if ($row['read']) echo "<input type=\"checkbox\" checked disabled readonly />";
                 else echo "<input type=\"checkbox\" disabled readonly />";
+				*/
                 echo "</td>";
                 echo "Title : " . $row['title'];
                 echo "Sender : " . $row['sender'];

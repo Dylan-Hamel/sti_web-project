@@ -29,7 +29,7 @@ if (isset($_GET['id'])) {
             $messageResult = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $stmt = null;
             $correctUser = False;
-            foreach ($messageResult as $rows => $row) {
+            foreach ($messageResult as $row) {
                 if ($_SESSION['username'] == $row['receiver']) {
                     $correctUser = True;
                 }
