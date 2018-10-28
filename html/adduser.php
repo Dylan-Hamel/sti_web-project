@@ -58,8 +58,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!$exist) {
                 $file_db->exec("INSERT INTO users (username, password, enable, admin) 
 					VALUES ('$newusername' , '$password', '$enable' ,'$admin');");
-                echo 'USER ADDED';
+                echo 'USER ADDED' . $admin . $enable;
             }
+			else {
+				echo 'USER already exists';
+			}
             $file_db = null;
         }
         catch(PDOException $e) {
@@ -72,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <br><br>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">  
-	Usenrmae: </br><input type="text" name="newusername">
+	Username: </br><input type="text" name="newusername">
 	<?php
 if (!empty($usernameErr)) {
     echo $usernameErr;
