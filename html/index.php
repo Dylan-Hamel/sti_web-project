@@ -43,7 +43,7 @@ try {
         echo "<td>" . $row['title'] . "</td>";
         echo "<td>" . $row['sender'] . "</td>";
         echo "<td>" . $row['datetime'] . "</td>";
-        echo "<td><a href=\"delete.php?id=".$row['id']."\" class=\"button\">Delete</a> <a href=\"read.php?id=".$row['id']."\" class=\"button\">Read</a> <a href=\"messages.php?receiver=".$row['sender']."&title=Re:".$row['title']."'\" class=\"button\">Answer</a></td>";
+        echo "<td><a href=\"delete.php?id=".$row['id']."\" class=\"button\">Delete</a> <a href=\"read.php?id=".$row['id']."\" class=\"button\">Read</a> <a href=\"messages.php?receiver=".$row['sender']."&title=Re:".$row['title']."\" class=\"button\">Answer</a></td>";
         echo "</tr>";
     }
     echo "</table>";
@@ -55,11 +55,15 @@ catch(PDOException $e) {
 ?>
  <br>
 <a href="messages.php" class="button">Send Message</a> <br>
-<a href="manageuser.php" class="button">Manage User</a> <br>
 <a href="password.php" class="button">Change Password</a> <br>
-<a href="adduser.php" class="button">Add User</a> <br>
-<a href="removeuser.php" class="button">Remove user</a> <br>
-<a href="passworduser.php" class="button">Change User Password</a> <br>
+<?php
+if ($_SESSION['admin'] == 1) {
+	echo '<a href="manageuser.php" class="button">Manage User</a> <br>';
+	echo '<a href="adduser.php" class="button">Add User</a> <br>';
+	echo '<a href="removeuser.php" class="button">Remove user</a> <br>';
+	echo '<a href="passworduser.php" class="button">Change User Password</a> <br>';
+}
+?>
 <a href="logout.php" class="button">Logout</a>
 </body>
 <script>

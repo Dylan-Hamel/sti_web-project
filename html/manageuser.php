@@ -27,13 +27,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $enable = $_POST["enable"];
     }
     $formFilled = True;
-} elseif (isset($_GET['username']) and isset($_GET['enable'])) {
+} elseif (isset($_GET['username'])) {
     if (empty($_GET["username"])) {
         $usernameErr = "Username is required";
         $error = True;
     } else {
         $username = htmlspecialchars($_GET["username"]);
-        $enable = htmlspecialchars($_GET["enable"]);
+		if(isset($_GET['enable'])) {
+			$enable = htmlspecialchars($_GET["enable"]);
+		}
+		else {
+			$enable = 0;
+		}
     }
     $formFilled = True;
 }
@@ -52,11 +57,16 @@ if ($formFilled and !$error) {
             }
         }
         if ($exist) {
-            $stmt = $file_db->prepare("UPDATE users SET enable=:enable' WHERE username=:username;");
+            $stmt = $file_db->prepare("UPDATE users SET enable=:enable WHERE username=:username;");
             $stmt->execute(array(':enable' => $enable, ':username' => $username));
             $applied = $stmt->rowCount();
             $stmt = null;
-            echo 'USER DISABLE';
+			if($enable){
+				echo 'USER ENABLE';
+			}
+			else {
+				echo 'USER DISABLE';
+			}
         } else {
             echo 'USER DOES NOT EXIST';
         }
@@ -82,9 +92,9 @@ if ($formFilled and !$error) {
 </form>
  <?php
 if ($applied == 0) {
-    echo "Probème lors de l'activation/desactivation de l'utilisateur";
+    echo "Problème lors de l'activation/desactivation de l'utilisateur";
 }
 ?>
-<button onclick="window.history.back();"> Return </button>
+<a href="index.php" class="button">Retour</a>
 </body>
 </html>

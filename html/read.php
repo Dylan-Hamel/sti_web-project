@@ -57,6 +57,6 @@ if (isset($_GET['id'])) {
 }
 ?>
 
-<button onclick="window.history.back();"> Return </button>
+<a href="index.php" class="button">Retour</a>
 </body>
 </html>

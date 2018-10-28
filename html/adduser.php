@@ -93,6 +93,6 @@ if (!empty($passwordErr)) {
 
 	<button type="submit">Submit</button>
 </form>
-<button onclick="window.history.back();"> Return </button>
+<a href="index.php" class="button">Retour</a>
 </body>
 </html>

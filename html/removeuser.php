@@ -82,6 +82,6 @@ if ($applied == 0) {
     echo "Probème lors de la suppression de l'utilisateur";
 }
 ?>
-<button onclick="window.history.back();"> Return </button>
+<a href="index.php" class="button">Retour</a>
 </body>
 </html>

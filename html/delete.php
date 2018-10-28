@@ -55,6 +55,6 @@ if (isset($_GET['id'])) {
     echo "Aucun message n'a été fourni en paramètre";
 }
 ?>
-<button onclick="window.history.back();"> Return </button>
+<a href="index.php" class="button">Retour</a>
 </body>
 </html>

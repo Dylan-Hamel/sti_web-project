@@ -86,6 +86,6 @@ if ($applied == 0) {
     echo "Error";
 }
 ?>
-<button onclick="window.history.back();"> Return </button>
+<a href="index.php" class="button">Retour</a>
 </body>
 </html>

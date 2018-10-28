@@ -104,6 +104,6 @@ if ($applied == 0) {
     echo "Probème lors de l'envoi du message";
 }
 ?>
-<button onclick="window.history.back();"> Return </button>
+<a href="index.php" class="button">Retour</a>
 </body>
 </html>
