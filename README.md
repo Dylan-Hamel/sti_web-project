@@ -14,3 +14,7 @@ docker exec -u root sti_project service php5-fpm start
 ```
 
 Il suffit d'avoir les fichiers placés au bon endroit (p.ex. ici c:/Users/username/docker/sti)
+
+
+
+Il existe un bug encore non résolu pour l'affichage en "détail" d'un message, parfois il ne s'affiche pas en entier
