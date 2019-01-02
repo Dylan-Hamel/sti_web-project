@@ -1,16 +1,59 @@
-# sti_web-project
+ # STI - Projet No 2
+
+## Introduction 
 
 
 
-Pour lancer le projet, la méthode la plus simple est d'utiliser le container docker sti:project2018
+## Tables des matières
 
-```dockerfile
-docker run -ti -v //C/Users/username/docker/sti:/usr/share/nginx/ -d -p 8080:80 --name sti_project --hostname sti arubinst/sti:project2018
-```
+[TOC]
 
-```
-docker exec -u root sti_project service nginx start
-docker exec -u root sti_project service php5-fpm start
-```
 
-Il suffit d'avoir les fichiers placés au bon endroit (p.ex. ici c:/Users/username/docker/sti)
+
+## Description du système
+
+### Data flow diagram
+
+[TODO]
+
+### Identification des biens
+
+[TODO]
+
+### Perimètre de sécurisation
+
+[TODO]
+
+## Sources de menaces
+
+[TODO]
+
+## Scénarios d'attaques
+
+### Elements du systèmes attaqué
+
+[TODO]
+
+### Motivation(s)
+
+[TODO]
+
+### Scénario(s) d'attaque
+
+[TODO]
+
+### STRIDE
+
+https://en.wikipedia.org/wiki/STRIDE_%28security%29
+
+[TODO]
+
+## Contre-mesures
+
+Par scénario :
+
+[TODO]
+
+## Conclusion 
+
+[TODO]
