@@ -54,6 +54,18 @@ Par scénario :
 
 [TODO]
 
+
+
+## Améliorations
+
+
+
+Vérification plus poussée des paramètres
+
+<u>Réf</u> : https://www.virendrachandak.com/techtalk/php-isset-vs-empty-vs-is_null/
+
+
+
 ## Conclusion 
 
 [TODO]
