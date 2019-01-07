@@ -1,7 +1,9 @@
 <?php
 include_once 'header.php';
-if (!isset($_SESSION['admin']) or $_SESSION['admin'] != 1) {
-    header("Location: index.php");
+if (!isset($_SESSION['admin']) or $_SESSION['admin'] !== 1) {
+
+    // Make sure you end script execution if not logged in
+    exit(header("Location: index.php"));
 }
 ?>
 <body>  

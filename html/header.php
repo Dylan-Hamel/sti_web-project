@@ -1,6 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {
+
+    // Make sure you end script execution if not logged in
     exit(header("Location: login.php"));
 }
 ?>

@@ -24,14 +24,21 @@ include_once 'header.php';
 try {
     // Connect DB
     $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
+
     // Set errormode to exceptions
     $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
     $username = $_SESSION['username'];
     $stmt = $file_db->prepare('SELECT * FROM messages WHERE receiver = :username;');
-    $stmt->execute(array(':username' => $username));
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $stmt = null;
+
+    // Closing DB connection the right way
+    $stmt->closeCursor();
     $file_db = null;
+
+    // Iterate over each row
     foreach ($result as $row) {
         echo "<tr>";
 		/*
