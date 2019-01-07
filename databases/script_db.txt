@@ -1,7 +1,7 @@
 CREATE TABLE `user` (
 	`username`	TEXT UNIQUE,
 	`password`	TEXT,
-	`enable`	BLOB,
+	`enable`	INTEGER,
 	`admin`	INTEGER,
 	PRIMARY KEY(`username`)
 );
