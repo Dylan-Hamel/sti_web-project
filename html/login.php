@@ -44,35 +44,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" AND
 			$file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 			// Select all users/password in DB
-			$stmt = $file_db->query("SELECT * FROM users;");
+			$stmt = $file_db->prepare("SELECT * FROM users WHERE username = :username LIMIT 1;");
+			$stmt->bindParam(':username', $username, PDO::PARAM_STR);
+			$stmt->execute();
+			$row = $stmt->fetch();
 
-			foreach ($result as $row) {
-				if ($username == $row['username'] && $row['enable'] == 1) {
+			// First authenticate, whatever enabled or not
+            if (\Sodium\crypto_pwhash_str_verify($row['password'], $password) !== false) {
 
-                    if (\Sodium\crypto_pwhash_str_verify($row['password'], $password) !== false) {
-                        $_SESSION['username'] = $username;
-                        $_SESSION['admin'] = $row['admin'];
-                    }
+                // Give hint about dis/en-abled account only once authenticated
+                if ($row['enable'] == 1) {
 
-					// Logged in
-					exit(header("Location: index.php"));
+                    // Setup session and redirect
+                    $_SESSION['username'] = $username;
+                    $_SESSION['admin'] = $row['admin'];
 
-				} elseif($username == $row['username'] && $password == $row['password'] && $row['enable'] == 0) {
-					$isEnabled = False;
-				}
-			}
-			
-			$usernameErr = "Username error";
-			$passwordErr = "Password error";
-			$disabledErr = "Account disabled";
-		}
+                    // Logged in
+                    exit(header("Location: index.php"));
+                } else {
+                    $isEnabled = False;
+                    $disabledErr = "Account disabled";
+                }
+            } else {
+                $usernameErr = "Username error";
+                $passwordErr = "Password error";
+            }
+        }
 		catch(PDOException $e) {
-			// Print PDOException message
+		    // Print PDOException message
 			echo $e->getMessage();
 		}
 	}
 } else {
-    $errorMsg = "Bad request";
+    echo "Bad request";
 }
 ?>
 

@@ -22,8 +22,8 @@ $valid = false;
 
 // Check if is a valid request (4 fileds expected)
 if ($_SERVER["REQUEST_METHOD"] == "POST" AND
-    isset($_POST["newusername"]) AND isset($_POST["password"]) OR
-    isset($_POST["enable"]) AND isset($_POST["admin"]) OR
+    isset($_POST["newusername"]) AND isset($_POST["password"]) AND
+    isset($_POST["enable"]) AND isset($_POST["admin"]) AND
     !is_null($_POST["newusername"]) AND !is_null($_POST["password"])) {
 
     // Check field types
