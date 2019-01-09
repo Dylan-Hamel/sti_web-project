@@ -28,7 +28,7 @@ Le but est de sécuriser au maximum cette application en se basant sur les prés
 
 ### Data flow diagram
 
-![STI_Proj_02_DFD_HTTP_login](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/STI_Proj_02_DFD_HTTP_login.png)
+![STI_Proj_02_DFD_HTTP_login](./images/STI_Proj_02_DFD_HTTP_login.png)
 
 Ci-dessus, un "data flow diagram" permettant de comprendre le login l'application.
 L'utilisateur envoie une requête au serveur WEB via son navigateur WEB.
@@ -46,7 +46,7 @@ Si les données sont correctes et lié à un utilisateur, la session sera créé
 
 Le schéma ci-dessous représente les différents échanges entre les pages et la DB.
 
-![](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/STI_Proj_02_DFD_project.png)
+![STI_Proj_02_DFD_project.png](./images/STI_Proj_02_DFD_project.png)
 
 ### Identification des biens
 
@@ -253,7 +253,7 @@ if (!isset($_SESSION['admin']) or $_SESSION['admin'] !== 1) {
 
 Nous avons également ajouter ```or $_SESSION['admin'] !== 1``` dans le test de base pour accéder à une page. 
 
-![tableau](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/tableau.png)
+![tableau](./images/tableau.png)
 
 <u>Réf</u> : https://www.virendrachandak.com/techtalk/php-isset-vs-empty-vs-is_null/
 
