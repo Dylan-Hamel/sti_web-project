@@ -1,0 +1,74 @@
+[
+    {
+        "admin": "1",
+        "enable": "1",
+        "password": "112233",
+        "username": "dylan"
+    },
+    {
+        "admin": "0",
+        "enable": "0",
+        "password": "",
+        "username": ""
+    },
+    {
+        "admin": "0",
+        "enable": "0",
+        "password": "99999",
+        "username": "david"
+    },
+    {
+        "admin": "0",
+        "enable": "1",
+        "password": "123123",
+        "username": "yannis"
+    },
+    {
+        "admin": "1",
+        "enable": "0",
+        "password": "123123",
+        "username": "monsieur"
+    },
+    {
+        "admin": "0",
+        "enable": "1",
+        "password": "123123",
+        "username": "didier"
+    },
+    {
+        "admin": "1",
+        "enable": "1",
+        "password": "123123",
+        "username": "dodo"
+    },
+    {
+        "admin": "0",
+        "enable": "1",
+        "password": "4444",
+        "username": "google"
+    },
+    {
+        "admin": "0",
+        "enable": "1",
+        "password": "123123",
+        "username": "test"
+    },
+    {
+        "admin": "0",
+        "enable": "1",
+        "password": "123123",
+        "username": "didi"
+    },
+    {
+        "admin": "0",
+        "enable": "1",
+        "password": "123123",
+        "username": "jean"
+    },
+    {
+        "admin": "0",
+        "enable": "",
+        "password": "123123",
+        "username": "pierre"
+    }
+]
