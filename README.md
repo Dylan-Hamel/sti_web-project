@@ -5,6 +5,7 @@
 L'application permet d'envoyer des messages d'un utilisateur à l'autre. Ces messages sont stockés dans une base de données ```SQLite```. 
 
 Pour que l'utilisateur puisse afficher ces messages, l'application utilise une requête SQL pour récupérer tous les messages en fonction du récepteur du message.
+=> Si le nom du récépteur et le même que le nom de l'utilisateur connecté, alors le message sera affiché.
 
 L'utilisateur peut supprimer et lire les messages. Il peut également répondre à un message. Dans ce cas, l'ancien message est affiché.
 
@@ -27,7 +28,7 @@ Le but est de sécuriser au maximum cette application en se basant sur les prés
 
 ### Data flow diagram
 
-![STI_Proj_02_DFD_HTTP_login](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/STI_Proj_02_DFD_HTTP_login.png)
+![STI_Proj_02_DFD_HTTP_login](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/STI_Proj_02_DFD_HTTP_login.png)
 
 Ci-dessus, un "data flow diagram" permettant de comprendre le login l'application.
 L'utilisateur envoie une requête au serveur WEB via son navigateur WEB.
@@ -43,6 +44,10 @@ Si les données sont correctes et lié à un utilisateur, la session sera créé
 
 
 
+Le schéma ci-dessous représente les différents échanges entre les pages et la DB.
+
+![](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/STI_Proj_02_DFD_project.png)
+
 ### Identification des biens
 
 L'application contient une base de données. Le but et de limiter les requêtes à la base de données. Lors d'une requête, il faut récupérer uniquement les informations nécessaires.
@@ -51,13 +56,28 @@ Il faut faire une requête uniquement quand c'est nécessaire.
 
 Lors d'```INSERT``` ou un ```UPDATE``` les données doivent être vérifier.
 
+Le cookie tranmis pour l'identification des utilisateurs doit être unique et non-prédictible.
+Utiliser un algorithme suffisant.
+
+Ce cookie doit également être tranmis sur un canal sécurisé.
+
 ### Perimètre de sécurisation
 
+La base de données doit être sécurisés.
+Elle contient tous les éléments de l'application :
 
+* Messages
+* Username + Password
+
+Ces données sont sensibles et doivent être innaccessible pour une personne non connecté.
 
 ## Sources de menaces
 
 Les sources de menaces peuvent être toutes les personne désirant accéder à des messages des utilisateurs. 
+
+Cela peut être un attaquant externe ou simplement un utilisateur qui est connecté et qui essaie d'obtenir des informations qu'il ne devrait pas pouvoir obtenir
+
+​	=> Messages d'autres utilisateurs qui ne lui sont pas destinés.
 
 
 
@@ -170,7 +190,7 @@ Dans le but de passer inconnu et que l'attaque ne soit pas identifié
 
 
 
-### STRIDE
+### STRIDE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 - **S**poofing
 - **T**ampering
@@ -181,7 +201,7 @@ Dans le but de passer inconnu et que l'attaque ne soit pas identifié
 
 
 
-## Contre-mesures
+## Contre-mesures !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 Par scénario :
 
@@ -189,9 +209,47 @@ Par scénario :
 
 
 
-## Améliorations
+## Défauts de l'application
 
 L'application a donc été sécurisée.
+Nous avons dans un premier temps analysé les erreurs et les failes de sécurités présentes sur l'application.
+
+1. Certaines requêtes n'utilisaient pas de ```prepareStatement```. Exemple de code :
+
+   ```php
+   // Connect DB
+   $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
+   // Set errormode to exceptions
+   $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   // Select all users/password in DB
+   $file_db->exec("SELECT username FROM users;");
+   $exist = False;
+   ```
+
+2. Nous avons vu que le Cookie et les données d'authentification étaient tranmises en claire :
+
+   ![](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/wireshark_post_http.png)
+
+3. Les mots de passes était stockés en clair dans la base de données
+
+   ```php
+   $file_db->exec("INSERT INTO users (username, password, enable, admin) 
+   					VALUES ('$newusername' , '$password', '$enable' ,'$admin');");
+   ```
+
+   ![](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/password.png)
+
+4. Les connexions à la base de données n'était jamais fermées.
+
+   => possibilité de rendre l'application indisponible
+
+5. Aucun test n'était fait lors de l'insertion ou l'update des valeurs.
+
+   => possibilité de mettre des mauvais types de données.
+
+
+
+## Améliorations
 
 ### Base de données
 
@@ -237,7 +295,7 @@ if (!isset($_SESSION['admin']) or $_SESSION['admin'] !== 1) {
 
 Nous avons également ajouter ```or $_SESSION['admin'] !== 1``` dans le test de base pour accéder à une page. 
 
-![tableau](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/tableau.png)
+![tableau](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/tableau.png)
 
 <u>Réf</u> : https://www.virendrachandak.com/techtalk/php-isset-vs-empty-vs-is_null/
 
