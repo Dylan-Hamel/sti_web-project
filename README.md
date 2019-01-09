@@ -228,7 +228,11 @@ Nous avons dans un premier temps analysé les erreurs et les failes de sécurit�
 
 2. Nous avons vu que le Cookie et les données d'authentification étaient tranmises en claire :
 
+   ![cookie.png](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/cookie.png)
+
    ![](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/wireshark_post_http.png)
+
+   Il serait donc possible de récupérer le Cookie et le rejouer ou simplement avoir les informations d'un utilisateur et se connecter avec son username/password.
 
 3. Les mots de passes était stockés en clair dans la base de données
 
