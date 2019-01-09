@@ -28,7 +28,7 @@ Le but est de sécuriser au maximum cette application en se basant sur les prés
 
 ### Data flow diagram
 
-![STI_Proj_02_DFD_HTTP_login](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/STI_Proj_02_DFD_HTTP_login.png)
+![STI_Proj_02_DFD_HTTP_login](./images/STI_Proj_02_DFD_HTTP_login.png)
 
 Ci-dessus, un "data flow diagram" permettant de comprendre le login l'application.
 L'utilisateur envoie une requête au serveur WEB via son navigateur WEB.
@@ -46,7 +46,7 @@ Si les données sont correctes et lié à un utilisateur, la session sera créé
 
 Le schéma ci-dessous représente les différents échanges entre les pages et la DB.
 
-![](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/STI_Proj_02_DFD_project.png)
+![STI_Proj_02_DFD_project.png](./images/STI_Proj_02_DFD_project.png)
 
 ### Identification des biens
 
@@ -207,52 +207,6 @@ Par scénario :
 
 [TODO]
 
-
-
-## Défauts de l'application
-
-L'application a donc été sécurisée.
-Nous avons dans un premier temps analysé les erreurs et les failes de sécurités présentes sur l'application.
-
-1. Certaines requêtes n'utilisaient pas de ```prepareStatement```. Exemple de code :
-
-   ```php
-   // Connect DB
-   $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
-   // Set errormode to exceptions
-   $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-   // Select all users/password in DB
-   $file_db->exec("SELECT username FROM users;");
-   $exist = False;
-   ```
-
-2. Nous avons vu que le Cookie et les données d'authentification étaient tranmises en claire :
-
-   ![cookie.png](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/cookie.png)
-
-   ![](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/wireshark_post_http.png)
-
-   Il serait donc possible de récupérer le Cookie et le rejouer ou simplement avoir les informations d'un utilisateur et se connecter avec son username/password.
-
-3. Les mots de passes était stockés en clair dans la base de données
-
-   ```php
-   $file_db->exec("INSERT INTO users (username, password, enable, admin) 
-   					VALUES ('$newusername' , '$password', '$enable' ,'$admin');");
-   ```
-
-   ![](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/password.png)
-
-4. Les connexions à la base de données n'était jamais fermées.
-
-   => possibilité de rendre l'application indisponible
-
-5. Aucun test n'était fait lors de l'insertion ou l'update des valeurs.
-
-   => possibilité de mettre des mauvais types de données.
-
-
-
 ## Améliorations
 
 ### Base de données
@@ -299,7 +253,7 @@ if (!isset($_SESSION['admin']) or $_SESSION['admin'] !== 1) {
 
 Nous avons également ajouter ```or $_SESSION['admin'] !== 1``` dans le test de base pour accéder à une page. 
 
-![tableau](/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site/tableau.png)
+![tableau](./images/tableau.png)
 
 <u>Réf</u> : https://www.virendrachandak.com/techtalk/php-isset-vs-empty-vs-is_null/
 

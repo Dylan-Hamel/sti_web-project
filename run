@@ -3,7 +3,7 @@
 docker kill sti_project
 docker rm sti_project
 
-docker run -ti -v "/Volumes/Data/HEIG_VD/STI/02_Projects/01_Project/02_Docker/site":/usr/share/nginx/ -d -p 18080:80 --name sti_project --hostname sti arubinst/sti:project2018
+docker run -ti -v "/Volumes/Data/HEIG_VD/STI/02_Projects/02_Project/site":/usr/share/nginx/ -d -p 18080:80 --name sti_project --hostname sti arubinst/sti:project2018
 
 docker exec -u root sti_project service nginx start
 docker exec -u root sti_project service php5-fpm start
