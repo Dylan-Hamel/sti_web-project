@@ -86,6 +86,8 @@ Il n'y a donc pas d'envoie de mot de passe par email ou de questions de sécurit
 
 ![sql_injection.png](./images/sql_injection.png)
 
+![sql_injection.png](./images/sql_injection2.png)
+
 
 
 L'application utilise donc une base de données SQLite.
@@ -239,4 +241,19 @@ if (empty($_POST["username"])) {
 
 Le code suivant cela peut-être lancer.
 Le ```if``` ne test pas toutes les possibilités.
+
+
+
+If totalement inutile
+
+```php
+
+$username = $_SESSION['username’];
+ if (isset($_GET['username']) and $_SESSION['admin'] == 1) {
+ $username = htmlspecialchars($_GET['username’]);
+ } 
+if ($_SERVER["REQUEST_METHOD"] == "POST") { 
+```
+
+
 
