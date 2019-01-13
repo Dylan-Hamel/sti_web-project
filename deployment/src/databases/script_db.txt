@@ -19,10 +19,10 @@ CREATE TABLE `messages` (
 
 
 insert into user (username,password,enable,admin)
-VALUES ( 'dylan','1234',1,1);
+VALUES ( 'dylan','$2y$10$W.pxtfPsEGdyA.Hpl5hatuBhVTC1Ssm8LNzSC0ur4nHHjnkOWuJFO',1,1);
 
 insert into user (username,password,enable,admin)
-VALUES ( 'yannis','1234',1,0);
+VALUES ( 'yannis','$2y$10$W.pxtfPsEGdyA.Hpl5hatuBhVTC1Ssm8LNzSC0ur4nHHjnkOWuJFO',1,0);
 
 
 select username from user where admin = 1;

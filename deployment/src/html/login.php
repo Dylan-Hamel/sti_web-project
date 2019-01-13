@@ -25,9 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" AND
     isset($_POST["username"]) AND !is_null($_POST["username"]) AND
     isset($_POST["password"]) AND !is_null($_POST["password"])) {
 
-    // Check the types are correct
-    if (filter_var($_POST["username"], PARAM_STR) !== false AND
-        filter_var($_POST["password"], PARAM_STR) !== false) {
+    // Check inputs
+    if (filter_var($_POST["username"], FILTER_SANITIZE_STRING) !== false AND
+        filter_var($_POST["password"], FILTER_SANITIZE_STRING) !== false) {
         $username = $_POST["username"];
         $password = $_POST["password"];
         $valid = true;
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" AND
 			$row = $stmt->fetch();
 
 			// First authenticate, whatever enabled or not
-            if (\Sodium\crypto_pwhash_str_verify($row['password'], $password) !== false) {
+            if (password_verify($password, $row['password'])) {
 
                 // Give hint about dis/en-abled account only once authenticated
                 if ($row['enable'] == 1) {
@@ -75,20 +75,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" AND
 			echo $e->getMessage();
 		}
 	}
-} else {
-    echo "Bad request";
 }
 ?>
 
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">  
-  Username: </br><input type="text" name="username" value="<?php echo $username; ?>">
+<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+  Username: </br><input type="text" name="username">
   <?php
 if (!empty($usernameErr)) {
     echo $usernameErr;
 }
 ?>
   <br><br>
-  Password: </br><input type="password" name="password" value="<?php echo $password; ?>">
+  Password: </br><input type="password" name="password">
   <?php
 if (!empty($passwordErr)) {
     echo $passwordErr;

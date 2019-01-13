@@ -1,6 +1,6 @@
 <?php
 include_once 'header.php';
-if (!isset($_SESSION['admin']) or $_SESSION['admin'] !== 1) {
+if (!isset($_SESSION['admin']) or $_SESSION['admin'] != 1) {
 
     // Make sure you end script execution if not logged in
     exit(header("Location: index.php"));
@@ -27,26 +27,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" AND
     !is_null($_POST["newusername"]) AND !is_null($_POST["password"])) {
 
     // Check field types
-    if (filter_var($_POST["newusername"], PARAM_STR) !== false AND
-        filter_var($_POST["password"], PARAM_STR) !== false AND
-        filter_var($_POST["enable"], PARAM_INT) !== false AND
-        filter_var($_POST["admin"], PARAM_INT) !== false) {
+    if (filter_var($_POST["newusername"], FILTER_SANITIZE_STRING) !== false AND
+        filter_var($_POST["password"], FILTER_SANITIZE_STRING) !== false AND
+        ($_POST["enable"] == 1 OR $_POST["enable"] == 0 OR strtolower($_POST["enable"]) == 'on') AND
+        $_POST["admin"] == 1 OR $_POST["admin"] == 0 OR strtolower($_POST["admin"]) == 'on') {
 
-        $username = $_POST["username"];
+        $username = $_POST["newusername"];
         $password = $_POST["password"];
-        $hash = \Sodium\crypto_pwhash_str($password,
-            \Sodium\CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
-            \Sodium\CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE);
+        $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $enable = $_POST["enable"];
-        $admin = $_POST["admin"];
+        $enable = ( ($_POST["enable"] == 1 OR strtolower($_POST["enable"]) == 'on') ? 1 : 0);
+        $admin = ( ($_POST["admin"] == 1 OR strtolower($_POST["admin"]) == 'on') ? 1 : 0);
         $valid = true;
     }
     else {
         $errorMsg = "Invalid value";
     }
-} else {
-    $errorMsg = "Bad request";
 }
 
 if ($valid) {
@@ -58,21 +54,22 @@ if ($valid) {
         $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Select all users/password in DB
-        $stmt = $file_db->prepare("SELECT username FROM users WHERE username=:username;");
+        $stmt = $file_db->prepare("SELECT username FROM users WHERE username = :username;");
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
-        $file_db->execute();
+        $stmt->execute();
         $rowCount = $stmt->rowCount();
 
         if ($rowCount == 0) {
+
             $stmt = $file_db->prepare("INSERT INTO users (username, password, enable, admin) 
 					VALUES (:username, :password, :enable, :admin);");
             $stmt->bindParam(':username', $username, PDO::PARAM_STR);
             $stmt->bindParam(':password', $hash, PDO::PARAM_STR);
             $stmt->bindParam(':enable', $enable, PDO::PARAM_INT);
             $stmt->bindParam(':admin', $admin, PDO::PARAM_INT);
-            $file_db->execute();
+            $stmt->execute();
 
-            echo 'USER ADDED' . $admin . $enable;
+            echo '<span style="color: green">User successfully added</span>';
         } else {
             $errorMsg = 'this user already exists';
         }
@@ -93,7 +90,7 @@ if ($valid) {
 
 <?php if (!empty($errorMsg)) { ?>
     <div>
-        <p><?php echo $errorMsg; ?></p>
+        <p><?php echo '<span style="color: red">'.$errorMsg.'</span>'; ?></p>
     </div>
 <?php } ?>
 
@@ -101,7 +98,7 @@ if ($valid) {
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">  
 	Username: </br><input type="text" name="newusername">
 	<br><br>
-	Password: </br><input type="text" name="password">
+	Password: </br><input type="password" name="password">
 	<br><br>
 	Enable: </br><input type="checkbox" name="enable" />
 	<br><br>

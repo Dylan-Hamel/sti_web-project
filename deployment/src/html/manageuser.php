@@ -1,6 +1,6 @@
 <?php
 include_once 'header.php';
-if (!isset($_SESSION['admin']) or $_SESSION['admin'] !== 1) {
+if (!isset($_SESSION['admin']) or $_SESSION['admin'] != 1) {
 
     // Make sure you end script execution if not logged in
     exit(header("Location: index.php"));
@@ -21,22 +21,24 @@ $valid = false;
 
 // Check if is a valid request (4 fileds expected)
 if ($_SERVER["REQUEST_METHOD"] == "POST" AND
-    isset($_POST["username"]) AND isset($_POST["enable"]) AND
-    !is_null($_POST["username"]) AND !is_null($_POST["enable"])) {
+    isset($_POST["username"]) AND isset($_POST["enable"]) AND isset($_POST["admin"]) AND
+    !is_null($_POST["username"]) AND !is_null($_POST["enable"]) AND !is_null($_POST["admin"])) {
 
     // Check field types
-    if (filter_var($_POST["username"], PARAM_STR) !== false AND
-        filter_var($_POST["enable"], PARAM_INT) !== false) {
+    if ((filter_var($_POST["username"], FILTER_SANITIZE_STRING) !== false) AND
+        (strtolower($_POST["enable"]) == 'on' OR strtolower($_POST["enable"]) == 'off' OR
+            $_POST["enable"] == 1 OR $_POST["enable"] == 0) AND
+        (strtolower($_POST["admin"]) == 'on' OR strtolower($_POST["admin"]) == 'off' OR
+            $_POST["admin"] == 1 OR $_POST["admin"] == 0)) {
 
         $username = $_POST["username"];
-        $enable = $_POST["enable"];
+        $enable = ( ($_POST["enable"] == 1 OR strtolower($_POST["enable"]) == 'on') ? 1 : 0);
+        $admin = ( ($_POST["admin"] == 1 OR strtolower($_POST["admin"]) == 'on') ? 1 : 0);
         $valid = true;
     }
     else {
         $errorMsg = "Invalid value";
     }
-} else {
-    $errorMsg = "Bad request";
 }
 
 if ($valid) {
@@ -48,10 +50,11 @@ if ($valid) {
         $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Select all users/password in DB
-        $stmt = $file_db->prepare("UPDATE users SET enable=:enable WHERE username=:username;");
+        $stmt = $file_db->prepare("UPDATE users SET enable = :enable, admin = :admin WHERE username = :username;");
         $stmt->bindParam(':enable', $enable, PDO::PARAM_INT);
+        $stmt->bindParam(':admin', $admin, PDO::PARAM_INT);
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
-        $file_db->execute();
+        $stmt->execute();
         $rowCount = $stmt->rowCount();
 
         if ($rowCount == 0) {
@@ -72,15 +75,19 @@ if ($valid) {
     }
 }
 
-echo $errorMsg;
+if (!empty($errorMsg)) {
+    echo $errorMsg;
+}
 
 ?>
 
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">  
-  Username : </br><input type="text" name="username"><?php if (!empty($usernameErr)) { echo $usernameErr; } ?>
-  <br>
-  Enable: </br><input type="checkbox" <?php echo (($enabled) ? 'checked="checked"' : ''); ?> name="enable">
-  <br>
+    Username : </br><input type="text" name="username"><?php if (!empty($usernameErr)) { echo $usernameErr; } ?>
+    <br>
+    Enable: </br><input type="checkbox" name="enable">
+    <br>
+    Admin: </br><input type="checkbox" name="admin">
+    <br>
   
   <button type="submit">Submit</button>
 </form>

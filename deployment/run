@@ -1,0 +1,14 @@
+#!/bin/bash
+name=sti_project
+container_id=$(docker ps -q -f name=$name)
+if [ "$container_id" ]; then
+
+	# cleanup
+	docker kill "$name"
+    docker rm "$name"
+fi
+
+# run your container
+docker run -ti -v "$(pwd)/src/:/usr/share/nginx/" -d -p 80:80 --name "$name" --hostname sti arubinst/sti:project2018
+docker exec -u root sti_project service nginx start
+docker exec -u root sti_project service php5-fpm start

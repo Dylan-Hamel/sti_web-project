@@ -12,10 +12,10 @@ include_once 'header.php';
 if (isset($_GET['id']) && !is_null($_GET['id'])) {
 
     // Once we got a value, make sure it is a valid ID
-    if (filter_var($int, FILTER_VALIDATE_INT) === false) {
+    if (filter_var($_GET['id'], FILTER_VALIDATE_INT) === false) {
 
         // Exit here
-        throw new InvalidArgumentException("Invalid parameter");
+        exit(header("Location: index.php?msg=bad-parameter"));
     } else {
 
         // Assuming the param is clean
@@ -31,8 +31,8 @@ if (isset($_GET['id']) && !is_null($_GET['id'])) {
 
         // Prepared statement with type enforcment
         $stmt = $file_db->prepare("DELETE FROM messages WHERE id=:id AND receiver =:user;");
-        $stmt->bindParam(':id', $id, PARAM_INT);
-        $stmt->bindParam(':user', $_SESSION['username'], PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':user', $_SESSION['username'], FILTER_SANITIZE_STRING);
         $stmt->execute();
 
         // Validation
@@ -49,6 +49,6 @@ if (isset($_GET['id']) && !is_null($_GET['id'])) {
     }
 }
 
-header("Location: index.php?success=" . intval($done));
+header("Location: index.php?success=" . intval($done) . "&msg=Message sucessfully deleted");
 
 ?>

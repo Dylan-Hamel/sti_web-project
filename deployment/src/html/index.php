@@ -21,6 +21,11 @@ include_once 'header.php';
   </tr>
   
 <?php
+
+if (isset($_GET['msg']) && !empty($_GET['msg']) && isset($_GET['success']) && !empty($_GET['success'])) {
+    echo '<span style="color: '. ( ($_GET['success'] == 1) ? "green" : "red" ) .'">' . $_GET['msg'] . '</span>';
+}
+
 try {
     // Connect DB
     $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');

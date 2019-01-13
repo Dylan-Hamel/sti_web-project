@@ -15,6 +15,7 @@ $receiver = $title = $body = "";
 $formFilled = False;
 $error = False;
 $applied = 2;
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["receiver"])) {
         $receiverErr = "Receiver is required";
@@ -36,42 +37,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $formFilled = True;
 }
-/*
-elseif(isset($_GET['receiver']) and isset($_GET['title'])){
-	if (empty($_GET["receiver"])) {
-		$receiverErr = "Receiver is required";
-	  $error = True;
-    } else {
-  	  $receiver = htmlspecialchars($_GET["receiver"]);
-    }
-	
-	if (empty($_GET["title"])) {
-		$titleErr = "Title is required";
-		$error = True;
-	} else {
-		$title = htmlspecialchars($_GET["title"]);
-	}
-	
-	$formFilled = True;
-}
-*/
+
 if ($formFilled and !$error) {
     $now = date("F j, Y, g:i a");
     try {
         // Connect DB
         $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
+
         // Set errormode to exceptions
         $file_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt = $file_db->prepare('INSERT INTO messages (title, body, sender, receiver, datetime) VALUES (:title, :body, :sender, :receiver, :now)');
-        $stmt->execute(array(':title' => $title, ':body' => $body, ':sender' => $_SESSION['username'], ':receiver' => $receiver, ':now' => $now));
+        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':body', $body, PDO::PARAM_STR);
+        $stmt->bindParam(':sender', $sender, PDO::PARAM_STR);
+        $stmt->bindParam(':receiver', $receiver, PDO::PARAM_STR);
+        $stmt->bindParam(':now', $now, PDO::PARAM_STR);
+        $stmt->execute();
         $applied = $stmt->rowCount();
-        $stmt = null;
-        $file_db = null;
     }
     catch(PDOException $e) {
         // Print PDOException message
         echo $e->getMessage();
     }
+
+    // Proper DB closing
+    $stmt->closeCursor();
+    $file_db = null;
 }
 ?>
 
