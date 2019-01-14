@@ -13,4 +13,4 @@ That's it ! You may reach our app at **http://localhost/**
 You can use following credentials :
 
 **login** : dylan
-**pass** : 1243
+**pass** : 1234

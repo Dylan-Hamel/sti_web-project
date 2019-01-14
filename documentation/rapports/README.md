@@ -189,11 +189,52 @@ Dans le but de passer inconnu et que l'attaque ne soit pas identifiée on va che
 - **D**enial of service : rendre l'application indisponible
 - **E**levation of privilege : une fois un accès utilisateur obtenu on peut par exemple tenter d'obtenir un accès admin.
 
-## Contre-mesures !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+## Contre-mesures
 
-Par scénario :
+Mesures prises pour sécuriser l'application
 
-[TODO]
+### Base de données
+
+* Utiliser des preparedStatement
+* Hasher le mot de passe en DB (avec SEL)
+* Vérification des saisies utilisateurs
+
+
+
+### Elévation de privilèges
+
+* Améliorer et valider les checks et conditions en fonction des actions voulues
+* Limiter le champ d'action des utilisateurs
+
+
+
+### Session
+
+* Utiliser un algorithme de création de token de qualité
+* Utiliser HTTPS pour échanger les informations telles que le mot de passe et le Cookie
+* Utiliser une fonction de destruction de Cookie de qualité
+* Mettre un lifetime et un path au Cookie
+
+
+
+### PHP
+
+* Augmenter la clareté du code pour faciliter les modifications et éviter les vulnérabilités dû a certaines modifications de code.
+* Suppression des commentaires ou messages d'erreurs qui pourraient donner des informations à un attaquant.
+* Gestion des erreurs
+
+
+
+### Système
+
+* Mise en place d'outils permettant de sécuriser l'application
+  * Fail2Ban
+  * ModSec
+  * Fail2Ban
+  * Anti-DDOS
+  * Etc.
+
+
 
 ## Améliorations
 
