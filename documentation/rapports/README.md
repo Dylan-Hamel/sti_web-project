@@ -5,7 +5,7 @@
 L'application permet d'envoyer des messages d'un utilisateur à l'autre. Ces messages sont stockés dans une base de données ```SQLite```. 
 
 Pour que l'utilisateur puisse afficher ces messages, l'application utilise une requête SQL pour récupérer tous les messages en fonction du récepteur du message.
-=> Si le nom du récépteur et le même que le nom de l'utilisateur connecté, alors le message sera affiché.
+=> Si le nom du destinataire est le même que le nom de l'utilisateur connecté, alors le message sera affiché.
 
 L'utilisateur peut supprimer et lire les messages. Il peut également répondre à un message. Dans ce cas, l'ancien message est affiché.
 
@@ -14,21 +14,16 @@ Le but est de sécuriser au maximum cette application en se basant sur les prés
 * Gestion correcte des sessions.
 * Protection contre les injections SQL.
 * Accorder les bons droits aux utilisateurs et bloquer l'élévation de privilèges.
-* ...
-
-
 
 ## Tables des matières
 
 [TOC]
 
-
-
 ## Description du système
 
 ### Data flow diagram
 
-![STI_Proj_02_DFD_HTTP_login](./ressources/images/STI_Proj_02_DFD_HTTP_login.png)
+![STI_Proj_02_DFD_HTTP_login](./images/STI_Proj_02_DFD_HTTP_login.png)
 
 Ci-dessus, un "data flow diagram" permettant de comprendre le login l'application.
 L'utilisateur envoie une requête au serveur WEB via son navigateur WEB.
@@ -36,17 +31,15 @@ Le serveur va dans un premier temps vérifier que la requête HTTP est correct.
 
 Si la requête arrive avec un Token de session correspondant à une session active du côté du serveur, le login est accepté et l'utilisateur peut accéder à ses pages.
 
-S'il n'y a pas de sessions, l'utilisateur va être rediriger vers la page ```login.php``` sur laquelle ses credentials lui seront demandées. Dès lors, s'il n'a pas de cookie, un cookie va lui être attribué via un champ ```Set-Cookie```. La session n'est en revanche pas active et liée à un utilisateur côté serveur.
+S'il n'y a pas de sessions, l'utilisateur va être redirigé vers la page ```login.php``` sur laquelle ses credentials lui seront demandées. Dès lors, s'il n'a pas de cookie, un cookie va lui être attribué via un champ ```Set-Cookie```. La session n'est en revanche pas active et liée à un utilisateur côté serveur.
 
 L'utilisateur entre ses credentials dans le formulaire et soumet cela à l'application. Les credentials seront validées au niveau de la base de données.
 
 Si les données sont correctes et lié à un utilisateur, la session sera créée et associée à un Token. L'utilisateur pourra donc, avec son token accéder à toutes les pages.
 
-
-
 Le schéma ci-dessous représente les différents échanges entre les pages et la DB.
 
-![STI_Proj_02_DFD_project.png](./ressources/images/STI_Proj_02_DFD_project.png)
+![STI_Proj_02_DFD_project.png](./images/STI_Proj_02_DFD_project.png)
 
 ### Identification des biens
 
@@ -54,7 +47,7 @@ L'application contient une base de données. Le but et de limiter les requêtes 
 
 Il faut faire une requête uniquement quand c'est nécessaire.
 
-Lors d'```INSERT``` ou un ```UPDATE``` les données doivent être vérifier.
+Lors d'```INSERT``` ou un ```UPDATE``` les données doivent être vérifiée.
 
 Le cookie tranmis pour l'identification des utilisateurs doit être unique et non-prédictible.
 Utiliser un algorithme suffisant.
@@ -63,13 +56,13 @@ Ce cookie doit également être tranmis sur un canal sécurisé.
 
 ### Perimètre de sécurisation
 
-La base de données doit être sécurisés.
+La base de données doit être sécurisée.
 Elle contient tous les éléments de l'application :
 
 * Messages
 * Username + Password
 
-Ces données sont sensibles et doivent être innaccessible pour une personne non connecté.
+Ces données sont sensibles et doivent être innaccessibles pour une personne non connecté.
 
 ## Sources de menaces
 
@@ -77,9 +70,7 @@ Les sources de menaces peuvent être toutes les personne désirant accéder à d
 
 Cela peut être un attaquant externe ou simplement un utilisateur qui est connecté et qui essaie d'obtenir des informations qu'il ne devrait pas pouvoir obtenir
 
-​	=> Messages d'autres utilisateurs qui ne lui sont pas destinés.
-
-
+Typiquement les messages d'autres utilisateurs qui ne lui sont pas destinés.
 
 ## Scénarios d'attaques
 
@@ -87,22 +78,20 @@ Cela peut être un attaquant externe ou simplement un utilisateur qui est connec
 
 Plusieurs éléments peuvent être attaqués.
 
-* La base de données. Pour avoir accès directement au mot de passe et aux des utilisateurs.
-* Les sessions. Permettrai d'utiliser la session d'un utilisateur et donc de voir ses messages.
+* La base de données. Pour avoir accès directement aux mots de passe et aux données des utilisateurs.
+* Les sessions. Permettrait d'utiliser la session d'un utilisateur et donc de voir ses messages.
 
 ### Motivation(s)
 
 Pouvoir obtenir des messages privés et confidentiels.
 
-Pour obtenir des mots de passe utilisateur et pouvoir les essayer sur d'autre sites. Souvent les utilisateurs utilisent les mêmes mot de passe pour toutes les sites WEB.
+Pour obtenir des mots de passe utilisateur et pouvoir les essayer sur d'autre sites. Souvent les utilisateurs utilisent les mêmes mot de passe pour toutes les sites Web.
 
-Par fierté et challenge personnel de pouvoir hacker une application PHP.
+Par fierté et challenge personnel de pouvoir hacker une application Web.
 
-Mettre le site WEB hors service.
+Mettre le site Web hors service.
 
 Pouvoir exécuter des scripts depuis ce serveur ou encore utiliser ces ressources pour d'autres activités.
-
-
 
 ### Scénario(s) d'attaque
 
@@ -130,9 +119,11 @@ Dans un premier temps, l'attaquant va essayer d'obtenir des informations par rap
 
 * Architecture de l'application
 
-* ...
+* Serveur Web : nginx ou Apache
 
-Faire du social enginerring pour avoir plus d'informations sur les utilisateurs et sur la plateforme.
+* Version du serveur web
+
+Faire du social enginerring pour avoir plus d'informations sur les utilisateurs et sur la plateforme afin, par exmple, de déduire le mot de passe d'un utilisateur.
 
 ### Trouver des failles sur les versions
 
@@ -140,7 +131,7 @@ Une fois que l'architecture et les composants connus, il faut chercher des faill
 
 ### Recherche d'informations supplémentaires
 
-Il serra également possible de trouver des informations par rapport à l'application en naviguant dessus. Il faudra regarder attentivement les commentaires qui ont pu être laissés dans les pages HTML / PHP.
+Il serait également possible de trouver des informations par rapport à l'application en naviguant dessus. Il faudra regarder attentivement les commentaires qui ont pu être laissés dans les pages HTML / PHP.
 
 Il est également interessé d'inspecter le code en utilisant l'inspecteur des navigateurs.
 
@@ -171,35 +162,32 @@ synchronized protected int next(int bits) {
 
 * Accéder à la base de données 
 * Se connecter sur le compte d'un utilisateur en utilisant son cookie
-* Trouver une fail PHP pour se connecter en root sur l'OS
+* Trouver une faille PHP
+* Procéder à une escalade de privilèges
 * Exécuter du code malveillant sur le serveur disant
 * Utiliser les ressources
-* Récupérer des informations comprémétantes et confidentiels.
+* Récupérer des informations comprométantes et confidentiels.
 
 ### Attaquer encore plus
 
-Une fois que l'on a réussi a attaquer le système au travers d'une fail, le but et de pouvoir utiliser cette fail pour pouvoir accéder à encore plus d'informations comprométantes.
+Une fois que l'on a réussi a attaquer le système au travers d'une fail, le but et de pouvoir utiliser cette faille  pour pouvoir accéder à encore plus d'informations mais également faire une escalade de privilège et maintenir un accès à l'instance.
 
 ### Laisser une porte
 
-Cela permettra de garder un accès permanant sur l'application ou le système
+Cela permettra de garder un accès permanant sur l'application ou le système => backdoor
 
 ### Supprimer les logs
 
-Dans le but de passer inconnu et que l'attaque ne soit pas identifié
+Dans le but de passer inconnu et que l'attaque ne soit pas identifiée on va chercher à supprimer nos traces après l'intrusion.
 
+### STRIDE
 
-
-### STRIDE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-- **S**poofing
-- **T**ampering
-- **R**epudiation
-- **I**nformation disclosure
-- **D**enial of service
-- **E**levation of privilege
-
-
+- **S**poofing : usurper l'identité d'un client
+- **T**ampering : altération des données à la volée (interception de la requête HTTP POST / GET et modification des données envoyées)
+- **R**epudiation : une personne non autorisée ayant réussi à se logguer sur le compte d'un utilisateur pourrait envoyer un mail à son insu.
+- **I**nformation disclosure : fuite d'informations sensibles
+- **D**enial of service : rendre l'application indisponible
+- **E**levation of privilege : une fois un accès utilisateur obtenu on peut par exemple tenter d'obtenir un accès admin.
 
 ## Contre-mesures !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -253,7 +241,7 @@ if (!isset($_SESSION['admin']) or $_SESSION['admin'] !== 1) {
 
 Nous avons également ajouter ```or $_SESSION['admin'] !== 1``` dans le test de base pour accéder à une page. 
 
-![tableau](./ressources/images/tableau.png)
+![tableau](./images/tableau.png)
 
 <u>Réf</u> : https://www.virendrachandak.com/techtalk/php-isset-vs-empty-vs-is_null/
 
