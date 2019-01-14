@@ -1,14 +1,21 @@
 #!/bin/bash
 name=sti_project
-container_id=$(docker ps -q -f name=$name)
-if [ "$container_id" ]; then
 
-	# cleanup
-	docker kill "$name"
-    docker rm "$name"
+echo "[INFO] : Check if sti_project is running"
+running=$(docker ps -q -f name=$name)
+if [ "$running" ]; then
+	echo "[WARN] : $running seem to be running, let me stop it first"
+	docker stop "$running"
 fi
 
-# run your container
+echo "[INFO] : Now check for relica containers"
+existing=$(docker ps -aq -f status=exited -f name=$name)
+if [ "$existing" ]; then
+	echo "Stopped instance found : $existing, i'll remove it"
+	docker rm "$existing"
+fi
+
+echo "[INFO] : Now you may run it a clean way"
 docker run -ti -v "$(pwd)/src/:/usr/share/nginx/" -d -p 80:80 --name "$name" --hostname sti arubinst/sti:project2018
 docker exec -u root sti_project service nginx start
 docker exec -u root sti_project service php5-fpm start
